@@ -33,6 +33,8 @@ public class VectorQuantization {
     }
     public static List<Integer> decompress(List<Integer> compressedFileName, List<Integer> codebook,String decompressedFileName){
         //implement decompression logic
+        List<Integer> decompressedData = new ArrayList<>();
+        return decompressedData;
     }
 
     public static List<Integer> buildCodebook(List<Integer> input, int codebookSize){
@@ -57,7 +59,7 @@ public class VectorQuantization {
                 int closestIndex = 0;
                 int closestDistance = Integer.MAX_VALUE;
                 for (int i = 0; i < codebookSize; i++) {
-                    int distance = Math.abs(value - codebook.get(i));
+                    int distance = calculateDistance(value, codebook.get(i));
                     if (distance < closestDistance) {
                         closestDistance = distance;
                         closestIndex = i;
@@ -86,7 +88,16 @@ public class VectorQuantization {
 
 
     public static int findClosestVector(int value, List<Integer> codebook){
-        //implement logic to find closest vector
+        int closestIndex = 0;
+        int closestDistance = Integer.MAX_VALUE;
+        for (int i = 0; i < codebook.size(); i++) {
+            int distance = calculateDistance(value, codebook.get(i));
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = i;
+            }
+        }
+        return closestIndex;
     }
 
     public static int calculateDistance(int a , int b){
@@ -106,9 +117,9 @@ public class VectorQuantization {
     }
 
     public static void main(String[] args) {
-        String inputFile = "input.png";
+        String inputFile = "Cute_Dog.jpg";
         String compressedFile = "compressed.bin";
-        String decompressedFile = "decompressed.png";
+        String decompressedFile = "decompressed.jpg";
         int codebookSize = 16; //adjustable in GUI
 
         compressFile(inputFile, compressedFile, codebookSize);

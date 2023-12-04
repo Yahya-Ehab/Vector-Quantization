@@ -11,16 +11,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class GUI implements ActionListener {
-    File textFile;
+    File imageFile;
     VectorQuantization vectorquantization = new VectorQuantization();
     JPanel panel= new JPanel();
     JButton select = new JButton();
     JLabel textLabel = new JLabel();
     JButton compress = new JButton();
     JButton decompress = new JButton();
-    JFrame frame = new JFrame("Codec");
+    JFrame frame = new JFrame("VQ Image Compression");
     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir")); // GUI to select files
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt", "tx"); // Filter to choose specific files only
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "bmp"); // Filter to choose specific files only
 
     public GUI(){
         panel.setLayout(null);
@@ -62,12 +62,12 @@ public class GUI implements ActionListener {
             if (selectFile()) {
                 compress.setVisible(true);
                 decompress.setVisible(true);
-                textLabel.setText("File selected: " + textFile.getName());
+                textLabel.setText("File selected: " + imageFile.getName());
             }
         }
         else if (actionEvent.getActionCommand().equals("Compress")) {
             try{
-                VectorQuantization.compressFile(textFile.getAbsolutePath(), "compressed.bin",16);
+                VectorQuantization.compressFile(imageFile.getAbsolutePath(), "compressed.bin",16);
                 textLabel.setBounds(145, 50, 250, 60);
                 textLabel.setText("Compression completed");
             }
@@ -78,7 +78,7 @@ public class GUI implements ActionListener {
         }
         else if (actionEvent.getActionCommand().equals("Decompress")) {
             try{
-                VectorQuantization.decompressFile("compressed.bin", "decompressed.txt",16);
+                VectorQuantization.decompressFile("compressed.bin", "decompressed.png",16);
                 textLabel.setBounds(140, 50, 250, 60);
                 textLabel.setText("Decompression completed");
             }
@@ -96,7 +96,7 @@ public class GUI implements ActionListener {
 
         // If you press "Select"
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            textFile = fileChooser.getSelectedFile();
+            imageFile = fileChooser.getSelectedFile();
             return true;
         }
         return false;
