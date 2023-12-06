@@ -5,7 +5,7 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 public class VectorQuantization {
-    static final int VECTOR_SIZE = 8;
+    static int VECTOR_SIZE = 8;
     static List<int[]> codebook = new ArrayList<>();
 
 

@@ -38,8 +38,10 @@ public class GUI implements ActionListener {
         select.setBounds(30, 160, 100, 30);
         compress.setBounds(230, 160, 100, 30);
         decompress.setBounds(350, 160, 110, 30);
-        codebook_size.setBounds(500, 160, 110, 30);
-        codebook_label.setBounds(500, 130, 110, 30);
+        vector_size.setBounds(470, 160, 100, 30);
+        codebook_size.setBounds(590, 160, 110, 30);
+        codebook_label.setBounds(590, 130, 110, 30);
+        vector_label.setBounds(470, 130, 100, 30);
 
         // Listens for button press and calls actionPerformed()
         select.addActionListener(this);
@@ -51,13 +53,17 @@ public class GUI implements ActionListener {
         panel.add(compress);
         panel.add(decompress);
         panel.add(codebook_size);
+        panel.add(vector_size);
         panel.add(codebook_label);
+        panel.add(vector_label);
 
         // Hides buttons till you select a file
         compress.setVisible(false);
         decompress.setVisible(false);
         codebook_size.setVisible(false);
+        vector_size.setVisible(false);
         codebook_label.setVisible(false);
+        vector_label.setVisible(false);
 
 
         frame.add(panel);
@@ -76,12 +82,15 @@ public class GUI implements ActionListener {
                 codebook_size.setVisible(true);
                 vector_size.setVisible(true);
                 codebook_label.setVisible(true);
+                vector_label.setVisible(true);
                 textLabel.setText("File selected: " + imageFile.getName());
             }
         }
         else if (actionEvent.getActionCommand().equals("Compress")) {
             try{
                 int codebookSize = (Integer) codebook_size.getValue();
+                int vectorSize = (Integer) vector_size.getValue();
+                VectorQuantization.VECTOR_SIZE = vectorSize;
                 VectorQuantization.compressFile(imageFile.getAbsolutePath(), "compressed.bin", codebookSize);
                 textLabel.setBounds(300, 50, 250, 60);
                 textLabel.setText("Compression completed");
