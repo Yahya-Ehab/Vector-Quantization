@@ -78,7 +78,7 @@ public class GUI implements ActionListener {
         }
         else if (actionEvent.getActionCommand().equals("Decompress")) {
             try{
-                VectorQuantization.decompressFile("compressed.bin", "decompressed.jpg",16,4,4);
+                VectorQuantization.decompressFile("test.jpg","compressed.bin", "decompressed.jpg",16,332,300);
                 textLabel.setBounds(140, 50, 250, 60);
                 textLabel.setText("Decompression completed");
             }
