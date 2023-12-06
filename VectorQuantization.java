@@ -5,7 +5,7 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 public class VectorQuantization {
-    static int VECTOR_SIZE = 8;
+    static final int VECTOR_SIZE = 8;
     static List<int[]> codebook = new ArrayList<>();
 
 
@@ -46,7 +46,6 @@ public class VectorQuantization {
         while (changed) {
             changed = false;
             List<List<int[]>> clusters = new ArrayList<>();
-
             for (int i = 0; i < codebookSize; i++) {
                 clusters.add(new ArrayList<>());
             }
@@ -74,10 +73,7 @@ public class VectorQuantization {
                 }
             }
         }
-
-       
     }
-//the problem might be here
     public static BufferedImage decompress(List<Integer> compressedData, List<int[]> codebook) {
 
         StringBuilder decompressedData = new StringBuilder();
@@ -101,30 +97,28 @@ public class VectorQuantization {
         return ImageVector.vectorToImage(vectorData);
     }
 
-    
-//the problem might be here
-public static void decompressFile(String compressedFile, String decompressedFile, int codebookSize) {
-    
-    List<Integer> compressedData = new ArrayList<>();
+   public static void decompressFile(String compressedFile, String decompressedFile, int codebookSize) {
 
-    try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(compressedFile))) {
-        int byteRead;
+       List<Integer> compressedData = new ArrayList<>();
 
-        while ((byteRead = bis.read()) != -1) {
-            compressedData.add(byteRead);
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-        return;
-    }
-    BufferedImage decompressedImage = decompress(compressedData, codebook);
+       try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(compressedFile))) {
+           int byteRead;
 
-    try {
-        ImageIO.write(decompressedImage, "jpg", new File(decompressedFile));
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
+           while ((byteRead = bis.read()) != -1) {
+               compressedData.add(byteRead);
+           }
+       } catch (IOException e) {
+           e.printStackTrace();
+           return;
+       }
+       BufferedImage decompressedImage = decompress(compressedData, codebook);
+
+       try {
+           ImageIO.write(decompressedImage, "jpg", new File(decompressedFile));
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+   }
 
 
     public static int findClosestVector(int[] rgb, List<int[]> codebook) {

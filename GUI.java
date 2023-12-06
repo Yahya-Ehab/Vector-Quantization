@@ -16,8 +16,8 @@ public class GUI implements ActionListener {
     JLabel vector_label = new JLabel();
     JButton compress = new JButton();
     JButton decompress = new JButton();
-    JSpinner codebook_size = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-    JSpinner vector_size = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+    JSpinner codebook_size = new JSpinner(new SpinnerNumberModel(16, 16, Integer.MAX_VALUE, 1));
+    JSpinner vector_size = new JSpinner(new SpinnerNumberModel(8, 8, Integer.MAX_VALUE, 1));
     JFrame frame = new JFrame("VQ Image Compression");
     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir")); // GUI to select files
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "jpg", "png", "gif", "bmp"); // Filter to choose specific files only
