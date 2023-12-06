@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-public class ImageToVector {
+public class ImageVector{
+    static int width;
+    static int height;
    public static List<int[]> ImageToVector(String imagepath) {
         List<int[]> rgbValues = new ArrayList<>();
         try {
@@ -19,8 +21,8 @@ public class ImageToVector {
                 return rgbValues;
             }
             BufferedImage image = ImageIO.read(new File(imagepath));
-            int width = image.getWidth();
-            int height = image.getHeight();
+            width = image.getWidth();
+            height = image.getHeight();
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
                     int color = image.getRGB(j, i);
@@ -36,17 +38,18 @@ public class ImageToVector {
         return rgbValues;
     }
 
-    public static BufferedImage vectorToImage(List<int[]> vectorData, int width, int height) {
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
+// the problem might be here
+    public static BufferedImage vectorToImage(List<int[]> vectorData) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+        // int w = vectorData.get(0).length;
+        // int h = vectorData.size();
         int index = 0;
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (index < vectorData.size()) {
                     int[] rgb = vectorData.get(index);
-                    int color = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
-
+                    int color =((rgb[0] << 16))  | ((rgb[1] << 8))| (rgb[2]) ;
                     image.setRGB(x, y, color);
                     index++;
                 } else {
@@ -60,4 +63,17 @@ public class ImageToVector {
     }
 }
 
+
+        // BufferedImage image2 = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+    
+        // for (int x = 0; x < h; x++) {
+        //     for (int y = 0; y < w; y++) {
+        //         int red = (int) collectedImage[x][y][0];
+        //         int green = (int) collectedImage[x][y][1];
+        //         int blue = (int) collectedImage[x][y][2];
+    
+        //         int rgb = (red << 16) | (green << 8) | blue;
+        //         image2.setRGB(y, x, rgb);
+        //     }
+        // }
 

@@ -2,14 +2,15 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
-
 import javax.imageio.ImageIO;
 
 public class VectorQuantization {
     static final int VECTOR_SIZE = 8;
+    static List<int[]> codebook = new ArrayList<>();
+
 
     public static void compress(List<int[]> input, int codebookSize, String compressedFileName) {
-        List<int[]> codebook = buildCodebook(input, codebookSize);
+        buildCodebook(input, codebookSize);
         StringBuilder compressedData = new StringBuilder();
 
         for (int[] rgb : input) {
@@ -33,8 +34,8 @@ public class VectorQuantization {
         }
     }
 
-    public static List<int[]> buildCodebook(List<int[]> input, int codebookSize) {
-        List<int[]> codebook = new ArrayList<>();
+    public static void buildCodebook(List<int[]> input, int codebookSize) {
+        codebook.clear(); 
         Random rand = new Random();
 
         for (int i = 0; i < codebookSize; i++) {
@@ -74,10 +75,11 @@ public class VectorQuantization {
             }
         }
 
-        return codebook;
+       
     }
+//the problem might be here
+    public static BufferedImage decompress(List<Integer> compressedData, List<int[]> codebook) {
 
-    public static BufferedImage decompress(List<Integer> compressedData, List<int[]> codebook, int width, int height) {
         StringBuilder decompressedData = new StringBuilder();
 
         for (int value : compressedData) {
@@ -91,15 +93,18 @@ public class VectorQuantization {
 
         List<int[]> vectorData = new ArrayList<>();
         for (int i = 0; i < decompressedData.length(); i += VECTOR_SIZE) {
-            String vectorString = decompressedData.substring(i, Math.min(i + VECTOR_SIZE, decompressedData.length()));
+            String vectorString = decompressedData.substring(i, i+VECTOR_SIZE);
             int vectorValue = Integer.parseInt(vectorString, 2);
             vectorData.add(codebook.get(vectorValue));
         }
 
-        return ImageToVector.vectorToImage(vectorData, width, height);
+        return ImageVector.vectorToImage(vectorData);
     }
 
-public static void decompressFile(String originalFile, String compressedFile, String decompressedFile, int codebookSize, int width, int height) {
+    
+//the problem might be here
+public static void decompressFile(String compressedFile, String decompressedFile, int codebookSize) {
+    
     List<Integer> compressedData = new ArrayList<>();
 
     try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(compressedFile))) {
@@ -112,9 +117,7 @@ public static void decompressFile(String originalFile, String compressedFile, St
         e.printStackTrace();
         return;
     }
-
-    List<int[]> codebook = buildCodebook(ImageToVector.ImageToVector(originalFile), codebookSize);
-    BufferedImage decompressedImage = decompress(compressedData, codebook, width, height);
+    BufferedImage decompressedImage = decompress(compressedData, codebook);
 
     try {
         ImageIO.write(decompressedImage, "jpg", new File(decompressedFile));
@@ -122,6 +125,8 @@ public static void decompressFile(String originalFile, String compressedFile, St
         e.printStackTrace();
     }
 }
+
+
     public static int findClosestVector(int[] rgb, List<int[]> codebook) {
         int closestIndex = 0;
         int closestDistance = Integer.MAX_VALUE;
@@ -143,20 +148,18 @@ public static void decompressFile(String originalFile, String compressedFile, St
     }
 
     public static void compressFile(String inputFile, String compressedFile, int codebookSize) {
-        List<int[]> input = ImageToVector.ImageToVector(inputFile);
+        List<int[]> input = ImageVector.ImageToVector(inputFile);
         compress(input, codebookSize, compressedFile);
     }
 
     public static void main(String[] args) {
+
         String inputFile = "test.jpg";
-        String originalFile = "test.jpg";
         String compressedFile = "compressed.bin";
         String decompressedFile = "decompressed.jpg";
         int codebookSize = 16; // adjustable in GUI
-        int width = 400;
-        int height = 400;
-
+       
         compressFile(inputFile, compressedFile, codebookSize);
-        decompressFile(originalFile, compressedFile, decompressedFile, codebookSize, width, height);
+        decompressFile(compressedFile, decompressedFile, codebookSize);
     }
 }
